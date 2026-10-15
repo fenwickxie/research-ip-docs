@@ -1,28 +1,36 @@
 # 导航规划控制专利组合与文献检索台账
 
 > 检索基准日：2026-10-15。
-> 交付版本：V1.1；三篇完整交底书，完成两轮文献驱动收敛与技术修订。
-> 证据范围：10 篇核心论文、7 件核心专利；论文中 4 篇核读方法正文，6 篇核读摘要；7 件专利均核读书目及相关权利要求。
+> 交付版本：V2.0；三篇交底书及三份逐案独立技术详解，保留前两轮检索并追加机器人来源驱动修订。
+> 证据范围：16 篇核心论文、7 件核心专利、2 份官方工程文档；论文中 7 篇核读相关方法正文，9 篇核读摘要；7 件专利均核读书目及相关权利要求。
 > 性质：研发与代理沟通草案，非授权、新颖性或自由实施法律意见。
-> 适用对象：具备转向、驱动和制动接口的自动驾驶车辆；不推定仓库已有实车实现。
+> 适用对象：移动机器人及车辆。A/C 最小实现选地面 AMR，B 给出轮式和足式接触控制支撑；足式/飞行扩展须各自验证，不推定已有实机实现。
 
 ## 1. 交付目录与阅读顺序
 
 | 案件 | 完整交底书 | 拟保护的技术链路 | 近期直接对比 |
 | --- | --- | --- | --- |
-| A | [01_patent_a_occlusion_handover_certificate_disclosure_20261015.md](01_patent_a_occlusion_handover_certificate_disclosure_20261015.md) | 接管时延过渡状态管、备份可接管集合、主轨迹前缀放行证书与控制侧接管 | L01 版本更新至 2026-10-05；P01、P02、P07 |
-| B | [02_patent_b_friction_evidence_consistent_planning_disclosure_20261015.md](02_patent_b_friction_evidence_consistent_planning_disclosure_20261015.md) | 分轮附着证据适用域、轮轨迹段约束依赖、失效传播、同版本规划分配执行 | L05、L09 均为 2026 论文；P06 为 2026 授权专利 |
-| C | [03_patent_c_local_frame_route_handover_disclosure_20261015.md](03_patent_c_local_frame_route_handover_disclosure_20261015.md) | 地图失配后连续局部控制、出口假设共同前缀、不可逆分叉停止约束与重验回切 | L03、L08、L10；P05 为 2026 授权专利 |
+| A | [01_patent_a_occlusion_handover_certificate_disclosure_20261015.md](01_patent_a_occlusion_handover_certificate_disclosure_20261015.md) | 实际驱动队列/代际/备份确认参与的接管过渡验证及有限前缀执行；高创新风险 | L12 OcclusionCBF、L13 gatekeeper 综述与 P02/P07 均有紧邻披露 |
+| B | [02_patent_b_friction_evidence_consistent_planning_disclosure_20261015.md](02_patent_b_friction_evidence_consistent_planning_disclosure_20261015.md) | 轮端或足端接触证据适用域、段/支撑相依赖撤销、上下游重验、同快照执行 | P03/P06；L14 足端机会约束、L15/L16 在线适应及全身反馈 |
+| C | [03_patent_c_local_frame_route_handover_disclosure_20261015.md](03_patent_c_local_frame_route_handover_disclosure_20261015.md) | 地图失配后任务出口/权限共同前缀、动作承诺及完整局部有效时域、重验回切 | L03/L08/L10、P04/P05、D01 坐标规范 |
+
+| 案件 | 单独新建的来源与完整技术详解 | 建议阅读内容 |
+| --- | --- | --- |
+| A | [01_patent_a_sources_and_technical_principles_20261015.md](01_patent_a_sources_and_technical_principles_20261015.md) | 接管三段时序、可恢复集合、队列/激活接口、差速动力学、两种队列的前缀反例 |
+| B | [02_patent_b_sources_and_technical_principles_20261015.md](02_patent_b_sources_and_technical_principles_20261015.md) | 摩擦椭圆/足端锥、质心与全身动力学、证据图和撤销、机会约束、AMR/四足案例 |
+| C | [03_patent_c_sources_and_technical_principles_20261015.md](03_patent_c_sources_and_technical_principles_20261015.md) | map/odom 权限与副本、多假设共同动作、空间/时间停止条件、室内门口与回切反例 |
 
 每篇均含 12 个一级章节：摘要、现有技术、问题、最小技术组合、模块接口、实施步骤、数值实施例、附图、区别与风险、权利要求建议、验证计划、迭代及补证。每案附两幅 Mermaid 示意图。摘要和权利要求为建议稿，不是正式申请文件。
 
-建议先读各案第 4、9、12 节确定保护边界，再由研发核对第 6、7、11 节的可实现性。发明人、申请人、首次形成时间、车型和 ECU 参数必须按真实记录补入。
+以理解为目标，先读对应详解第 1-3 节的直观问题、来源矩阵和架构，再读原理、实现和算例，最后核对交底书第 4、9、10 节保护边界。每份详解独立含 14 节、自足参考文献、接口、伪代码和失败处理。发明人、申请人、形成时间、平台与控制器参数必须按真实记录补入。
 
 ## 2. 检索范围与最新性边界
 
 使用 arXiv 公告时间倒序检索、摘要页版本历史、可访问论文 HTML 正文、Google Patents 检索索引和公开全文。近期线索优先覆盖 2025-2026 年，但保留能直接削弱宽泛创新主张的早期基础文献。
 
 本轮实际核验的近期更新包括：L01 v3（2026-10-05）、L04 首稿（2026-10-02）、L10 v2（2026-10-02）、L05 首稿（2026-07-11），以及 P05 授权公告（2026-04-07）、P06 授权公告（2026-02-06）。论文首稿、修订、期刊出版和专利申请公布、授权公告分别记录，不混作同一种“发表时间”。
+
+V2.0 追加核验 L12 首稿 2026-09-06、L13 v2 2026-09-18；L11/L14-L16 为相关多平台及足式基础，不为了“最新”删去直接影响创新判断的旧来源。新增机器人论文检索没有同步完成机器人专利分类全量扩展，不能因已有车辆专利可类比就认定机器人领域没有更近专利。
 
 不声称这些是全球最新的全部成果，也不声称三案具有已被法律确认的新颖性。未公开申请、数据库延迟、非英语/中文文献、全文不可检索附件、同族差异和检索语义遗漏均可能影响结论。CNIPA、WIPO、Espacenet、USPTO 的官方档案与审查意见尚未逐件复核。
 
@@ -32,6 +40,7 @@
 - Google Patents 正文抓取部分返回 503，P04-P06 后通过浏览器取得有效书目及权利要求。
 - 末轮尝试 `after=publication:20250101`、`before=publication:20261016`、`sort=new` 的结构化检索，返回记录包含 2015、2018 年专利，日期筛选和排序未得到验证。该轮只作为过滤失败记录，不能据此认定“2026 年 10 月前最新专利已查全”。
 - 各核心来源中的日期均由具体摘要页或全文书目核对，不以检索排序代替日期验证；L04 索引曾显示 10 月 1 日，原始提交历史为 10 月 2 日，本台账采用后者。
+- L12 索引日期与原始 UTC 提交历史有一天差异，本版采用 2026-09-06；L15 v2 采用原始历史 2025-11-30。D01 网页及部分 ROS 文档返回防爬页，实际读取其公开官方源文本；错误 Nav2 配置路径返回 404，不计作正文已读。
 
 ## 3. 可复现检索路径
 
@@ -48,10 +57,13 @@
 | R2-B | [arXiv: friction constraint invalidation](https://arxiv.org/search/?query=friction+constraint+invalidation&searchtype=all&order=-announced_date_first&size=25) | 返回 2 条；核验相关 L09 摘要；同时取得 P06 中文权利要求并修订 B 案 |
 | R2-C | [arXiv: navigation topological ambiguity](https://arxiv.org/search/?query=navigation+topological+ambiguity&searchtype=all&order=-announced_date_first&size=25) | 返回 17 条；核验 L10 原始历史及摘要，修订多假设和提交边界 |
 | R2-P | Google Patents 上述三主题，尝试近期公开日过滤及新近排序 | 返回日期范围外文献，过滤失败；没有把其返回顺序写成最新排名 |
+| R3-A | 机器人备份/遮挡关键词线索后逐条核验 [DYNUS](https://arxiv.org/abs/2504.16734)、[OcclusionCBF](https://arxiv.org/abs/2609.06342)、[备份过滤综述](https://arxiv.org/abs/2604.02401)，并追踪综述引文 | 核读 L12/L13 相关正文，确认最大名义时长和倒计时已有公开；原始 gatekeeper 引文仅间接核对，未计为新增核心全文 |
+| R3-B | 四足摩擦/MPC 关键词后逐条核验 [L14](https://arxiv.org/abs/2411.03481)、[L15](https://arxiv.org/abs/2510.15626)、[L16](https://arxiv.org/abs/1905.06144) | L14 正文 III-V 作为足端约束和分层控制来源，L15/L16 保持摘要级；不将动态遗憾当安全保证 |
+| R3-D | 从官方源仓库读取 REP-105 和 Nav2 Collision Monitor README | D01/D02 明确局部连续可漂移、TF 权限、速度过滤及非硬实时认证边界；动态分支未固定提交 |
 
 arXiv 按公告时间排序主要反映首版公告年月，不保证最近修订优先；因此必须单独读取已有强相关论文的版本历史。
 
-后续官方检索建议结合 B60W60/00、B60W30/09、B60W40/06、G05D1/00、G01C21/00 等分类及“备份接管、执行前缀、分轮附着、约束撤销、定位失配、出口歧义”等中文同义词，继续做申请人、同族和引证扩展。分类为建议入口，未完成全部分类检索。
+后续官方检索建议结合 B60W60/00、B60W30/09、B60W40/06、G05D1/00、G01C21/00、B25J 等入口及“机器人备份接管、执行队列、接触证据、支撑相撤销、全身控制一致性、重定位失配、任务出口歧义”等同义词，继续做申请人、同族和引证扩展。分类仅为入口建议，未完成其全部检索，也未核对所有新版分类细目。
 
 ## 4. 核心论文清单
 
@@ -69,6 +81,12 @@ arXiv 按公告时间排序主要反映首版公告年月，不保证最近修�
 | L08 | Pritom Gogoi, Faris Janjos, Bin Yang, Andreas Look. [Uncertainty Matters: Structured Probabilistic Online Mapping for Motion Prediction in Autonomous Driving](https://arxiv.org/abs/2603.20076) | 2026-03-20 / v1 | [正文](https://arxiv.org/html/2603.20076v1) III-V；LRPD 相关几何、nuScenes 离线建图/预测；不当作闭环导航实证 |
 | L09 | Yurun Gan, Ziyu Song, Jing Yang, Zheng Lin, Jianuo Zhang, Tongtong Gu, Haitao Ding, Nan Xu, Por Lip Yee, Wei Ni, Jun Luo. [Dual-Envelope Constrained Nonlinear MPC for Distributed Drive Electric Vehicles Drifting Under Bounded Steering and Direct Yaw-Moment Control](https://arxiv.org/abs/2604.07342) | 2026-04-08 / v1 | 摘要；转向与横摆输入耦合改变可恢复稳定域，促使 B 案新增输入条件依赖 |
 | L10 | Jiaming Wang, Jizhuo Chen, Diwen Liu, Atharva Ghotavadekar, Jiaxuan Da, Linh Kastner, Harold Soh. [Change-Robust Online Topological Memory for Long-Term Relocalization and Semantic Navigation](https://arxiv.org/abs/2605.02227) | 2026-05-04 / v2 2026-10-02；作者页面标注 NeurIPS 2026 接收，本轮未独立核会议名录 | 摘要；CROSS 多位姿分支及地图关联提交前验证，促使 C 案收窄并加入提交撤销 |
+| L11 | Kota Kondo, Mason Peterson, Nicholas Rober, Juan Rached Viso, Lucas Jia, Jialin Chen, Harvey Merton, Jonathan P. How. [DYNUS: Uncertainty-aware Trajectory Planner in Dynamic Unknown Environments](https://arxiv.org/abs/2504.16734) | 2025-04-23 / v3 2025-05-18 | 摘要；探索/安全/应急轨迹、轮式/四足/飞行平台；不将多平台验证转作本案结果 |
+| L12 | Taekyung Kim, Hun Kuk Park, Renya Wada, Nikolay Atanasov, Shumon Koga, Dimitra Panagou. [OcclusionCBF: Backup Control Barrier Functions for Safe Navigation Among Hidden Dynamic Obstacles](https://arxiv.org/abs/2609.06342) | 2026-09-06 / v1 | [正文](https://arxiv.org/html/2609.06342v1) II-IV、V-D；直接覆盖隐藏占用、备份与验证终端；IV-E 说明有限采样不自动继承连续保证 |
+| L13 | Taekyung Kim, Aswin D. Menon, Akshunn Trivedi, Dimitra Panagou. [Backup-Based Safety Filters: A Comparative Review of Backup CBF, Model Predictive Shielding, and gatekeeper](https://arxiv.org/abs/2604.02401) | 2026-04-02 / v2 2026-09-18；页面列 CDC 2026，未独立核会议记录 | [正文](https://arxiv.org/html/2604.02401v2) II-VI；gatekeeper 最长切换时间、有状态递减及 MPS/Backup CBF 比较；A 案须据此显著收窄 |
+| L14 | Ananya Trivedi, Sarvesh Prajapati, Mark Zolotas, Michael Everett, Taskin Padir. [Chance-Constrained Convex MPC for Robust Quadruped Locomotion Under Parametric and Additive Uncertainties](https://arxiv.org/abs/2411.03481) | 2024-11-05 / v1 | [正文](https://arxiv.org/html/2411.03481v1) III-V；SRBD、接触机会锥、摆动足零力、Go1；油面实验调整速度/摩擦，不能泛称所有地面无需调整 |
+| L15 | Hongyu Zhou, Xiaoyu Zhang, Vasileios Tzoumas. [Adaptive Legged Locomotion via Online Learning for Model Predictive Control](https://arxiv.org/abs/2510.15626) | 2025-10-17 / v2 2025-11-30 | 摘要；随机 Fourier 特征/最小二乘在线残差及 MPC，Gazebo/MuJoCo；动态遗憾非物理安全保证 |
+| L16 | Ruben Grandia, Farbod Farshidian, Rene Ranftl, Marco Hutter. [Feedback MPC for Torque-Controlled Legged Robots](https://arxiv.org/abs/1905.06144) | 2019-05-15 / v2 2019-08-09；页面列 IROS 2019 | 摘要；反馈桥接 MPC 与高频力矩、摩擦约束与带宽，足式基础先例 |
 
 作者姓名在本台账中部分去除变音符以便文本检索，标准拼写可从原始页面获取。论文中的实验提升率和运算时间均未作为本案已实现效果。
 
@@ -90,6 +108,15 @@ arXiv 按公告时间排序主要反映首版公告年月，不保证最近修�
 
 仍需跟进的非核心线索：CN113632033B（车辆控制方法和装置）、CN114596360B（图拓扑主动定位建图，英文索引题名未定稿）曾在结果出现，但全文抓取失败，未据其摘要作排除结论；P01 的 CN114175023A 等同族应回到官方文本逐项核查。这些不计入 7 件核心全文专利。
 
+### 5.1 官方工程来源
+
+| 编号 | 文档及原始来源 | 实际核读及使用边界 |
+| --- | --- | --- |
+| D01 | Wim Meeussen，REP-105: Coordinate Frames for Mobile Platforms；2010-10-27，Active/Informational；[官方源文](https://raw.githubusercontent.com/ros-infrastructure/rep/master/rep-0105.rst) | 读取帧语义、Frame Authorities、Transitions Between Maps；`odom` 可无界漂移、`map` 可跳变，单一变换权威和电梯语义均为已有约定 |
+| D02 | Navigation2 project，Nav2 Collision Monitor；[官方 README](https://raw.githubusercontent.com/ros-navigation/navigation2/main/nav2_collision_monitor/README.md) | 读取 Features、Design、Metrics；独立过滤 cmd_vel、停止/减速/TTC；官方明确不提供硬实时安全认证 |
+
+两者访问于 2026-10-15，均为动态源分支而非固定提交或发行版。未核定软件许可适配和安全合规；不能将文档示例运行时间当作本案端到端最坏耗时。
+
 ## 6. 反例驱动的收敛与实际修订
 
 | 案件 | 首轮宽泛设想与反例 | 初稿 V1.0 的收敛 | 第二轮新增证据及实际 V1.1 修订 |
@@ -98,23 +125,31 @@ arXiv 按公告时间排序主要反映首版公告年月，不保证最近修�
 | B | 附着不确定性 MPC 见 L07；自然激励、分轮动作及置信度衰减见 P03 | 附着证据适用域与轮轨迹段依赖撤销、同版本规划分配执行 | 核读 P06 权利要求后删除附着场、前后轴分配和控制器同步的首创暗示；依据 L09 补输入耦合重验；补指令代际、生效时刻和队列撤销过渡 |
 | C | 感知导航与不确定性传播见 L03/L08；地图差异见 P04；横纵限制见 P05 | 合理出口假设共同前缀、不可逆分叉停止边界、连续局部接管与重验回切 | 核读 L10 摘要后将多假设和延迟提交归为已有方向；加入出口提交撤销、相关重复误匹配及完整停止时域误差增长约束 |
 
+V2.0 的第三轮实际修订：
+
+| 案件 | 新增来源带来的实质修订 | 新建详解及机器人实现支撑 |
+| --- | --- | --- |
+| A | L12/L13 推翻“最长前缀＋备份＋倒计时可作主要新点”的推断；承认高创新风险，仅保留队列/代际/实际激活闭环作为待核查候选 | 差速模型、外形/角运动、驱动接口；同样时延下匀速与加速旧队列分别只允许 0.16/0.10 s 示例 |
+| B | L14-L16 明确足端 MPC 和分层全身反馈已有先例；不把换为四足当创新 | 通用 ContactEvidence、接触相依赖、足端锥、质心/全身动力学；AMR 和四足低摩擦撤证例 |
+| C | D01 明确双帧是公开约定，连续 odom 可无界漂移；原始 TF 与任务对齐副本分开 | 相似门口/权限、可回退性决定承诺边界；空间够但完整停止时域不够的 AMR 反例 |
+
 ## 7. 技术假设、保护分工与风险
 
 | 案件 | 待检验机制 | 能推翻假设的证据或测试 |
 | --- | --- | --- |
-| A | 备份未来可接管集合限制主轨迹放行前缀，而非分别检查两条轨迹 | 单一在先文献完整公开同一关系；或接管过渡段在允许界内仍错误放行 |
-| B | 局部附着证据撤销经轮轨迹段依赖改变速度、力分配和确认生效时刻 | 相同依赖传播在先完整披露；或附着突降时仍跨版本执行或忽略已排队输入 |
-| C | 多出口共同前缀决定局部接管及不可逆分叉前停止，而非只选择最高分出口 | 在先公开相同链路；或出口未消歧仍越界、局部误差增长后才停车 |
+| A | 已知备份过滤基础上，实际驱动队列与激活反馈是否产生未披露且非显而易见的控制闭环 | L12/L13 已覆盖抽象骨架；原始 gatekeeper/异步架构若覆盖队列绑定则需继续收窄或停止按当前组合申请 |
+| B | 局部接触证据撤销经轨迹段/支撑相依赖改变速度、落足、力分配和确认生效 | 相同依赖链已有完整披露；或摩擦/模式变化后仍跨版本、用摆动足承载、忽略旧队列 |
+| C | 任务出口/权限共同动作与完整局部有效时域共同限制接管及承诺 | 在先公开相同链路；或歧义未解仍越界、把连续 odom 当误差有界、失效后才停车 |
 
 三案可分别实施：A 不要求使用 B 的附着估计器，底盘能力可来自既有接口；B 不要求遮挡或地图失配；C 不要求 A 的证书格式或 B 的证据图。联合部署时可交换保守底盘能力和有效走廊，但独立权利要求不应互相依赖才具备完整实施链路。
 
-优先建议：按目标研发资源选择 B 的约束失配闭环或 A 的接管监控作为最小原型；C 依赖局部定位完整性、道路拓扑与规则验证，集成门槛更高。这是实施工作量排序，不是授权概率排序。
+最小原型建议：A 选带驱动队列反馈的直线差速 AMR，B 先选轮式撤证闭环再评估足式全身接口，C 选单楼层两假设/一个门口。A 创新风险尤其高，先做原始 gatekeeper 和异步架构对比，再投入申请；平台扩展不提高当然授权概率。
 
 三案均存在较强的创造性组合风险：可达性监督、依赖传播、版本一致性、假设树与局部坐标本身均非新概念。当前不能据“未在已读来源找到全部组合”宣布具有专利法上的新颖性或创造性；需要单篇对照新颖性分析、最接近文献及结合动机分析，和官方同族权利要求的自由实施评估。
 
 ## 8. 已做检查与未做验证
 
-已逐案执行首次写入检查与 V1.1 修订回归：
+已逐案执行首次写入、V1.1 回归及 V2.0 交底书/独立详解的算术和结构检查：
 
 | 案件 | 复算项目 | 结果与含义 |
 | --- | --- | --- |
@@ -123,15 +158,19 @@ arXiv 按公告时间排序主要反映首版公告年月，不保证最近修�
 | B | 20 m 内将速度降至 8 m/s，保证减速 2 m/s² | 忽略时延的上游筛查上界 12 m/s，当前 15 m/s 时不能靠修改目标速度宣称可行 |
 | C | 9 m 分叉前停止、0.25 s 时延、2 m/s² 减速、误差及裕量合计 1 m | 速度筛查上界 5.179 m/s；5 m/s 需 8.5 m；6 m/s 需 11.5 m，不能承诺在原边界前停住 |
 | C | 3.6 m 走廊、1.9 m 车宽、0.25 m 误差、0.20 m 裕量 | 中心轨迹每侧余量 0.40 m；误差增至 0.70 m 时余量 -0.05 m，拒绝继续依赖原走廊 |
+| A 机器人 | 1.2 m/s、0.15 s、0.8 m/s²、净距离 1.5 m、裕量 0.2 m、监督周期 0.02 s | 匀速旧队列需求 1.28 m、工程前缀 0.16 s；过渡仍加速 0.3 m/s² 时需求 1.352140625 m、前缀 0.10 s；时延改 0.35 s 则立即需求 1.52 m，拒绝 |
+| B 机器人 | 160 kg AMR，两驱动轮各载荷 400 N，裕量 0.8；摩擦下界 0.5 降 0.15 | 每轮切向能力上界 160 N 降 48 N，整体加速度必要上界 0.6 m/s²；1 m/s、0.12 s、裕量 0.15 m 时，即便乐观满能力也至少需 1.1033 m |
+| B 足式 | 20 kg 四足水平均分支撑，裕量 0.8，摩擦下界 0.4 降 0.15 | 每足法向 49.05 N，切向上界 15.696 N 降 5.886 N；总水平加速度必要上界 1.1772 m/s²，原 2 m/s² 请求不可行；未证明全身可行 |
+| C 机器人 | 0.8 m/s、0.2 s、0.6 m/s²、净距离 1.2 m，误差/裕量 0.25 m | 必要距离 0.9433 m，接管至停止需 1.5333 s；局部只有效 1.4 s 时仍拒绝完整保证；1.4 m 走廊/0.6 m 机身等参数下侧余量 0.20 m |
 
-另检查 12 节结构、围栏闭合、来源编号映射、本地链接和三案诊断；通过只表示文档完整性及示例算术一致。编辑器对三案未报告诊断错误，不代表公式证明或专利质量认证。Mermaid 为流程源图，未进行专门渲染器预览。
+检查范围包括交底书各 12 节、详解各 14 节、围栏闭合、来源编号映射、本地链接及编辑器诊断；通过只表示文档完整性及示例算术一致，不代表公式证明或专利质量认证。Mermaid 为流程源图，未进行专门渲染器预览。
 
-未做：完整算法实现、求解器测试、统计显著性测试、车辆动力学仿真、硬件在环、实车标定、安全认证、专业查新或侵权评价。各案验证计划可作为后续研发实验清单，不能把计划中的样本数或效果写成既有结果。
+未做：完整算法实现、求解器测试、统计显著性测试、机器人/车辆动力学仿真、硬件在环、实机标定、安全认证、专业查新或侵权评价。各案验证计划可作为研发实验清单，不把计划中的样本数、论文成功率或其硬件能力写成本案成果。
 
 ## 9. 申请前的必要补证
 
 1. 从官方数据库下载核心专利公布/授权原文及审查档案，核对同族、申请主体和真实优先权链；特别关注 P01/P06 的主体差异。
-2. 补读仅摘要核验的 L02/L04/L06/L07/L09/L10 正文，针对每案独立项做逐特征比对，而非只比较摘要用词。
+2. 补读仅摘要核验的 L02/L04/L06/L07/L09/L10/L11/L15/L16 正文及 L13 引述的原始 gatekeeper，针对各独立项逐特征比对；L14 网页公式显示疑点按 PDF/代码核对，详解使用自行列明假设的标准高斯式，不直接照抄疑似转换错误。
 3. 按中文同义词、分类、申请人和引证继续扩展，并补齐截止日附近未能有效排序的近期专利检索。当前最新性覆盖是有限核验，不是完整查新报告。
 4. 按各案第 11 节完成最小闭环原型与反例测试，记录失败、时延、误差界和边界标定，而不只选取成功场景。
 5. 核对发明人实际技术贡献、企业权属、首次研发记录及此前对外公开；正式申请前避免公开拟申请方案的新增细节。
